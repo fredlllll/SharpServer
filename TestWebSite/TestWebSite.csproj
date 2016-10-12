@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2E64BA73-C69F-4F41-A352-E35270584D78}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{C14881C4-CC96-44C3-8844-0BDAE54B3E8A}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SharpServer</RootNamespace>
-    <AssemblyName>SharpServer</AssemblyName>
+    <RootNamespace>TestWebSite</RootNamespace>
+    <AssemblyName>TestWebSite</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,19 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Buffer.cs" />
-    <Compile Include="Page.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="TestPage.cs" />
+    <Compile Include="TestSite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SharpServer.cs" />
-    <Compile Include="Site.cs" />
-    <Compile Include="SiteConfig.cs" />
-    <Compile Include="StreamBuffer.cs" />
-    <Compile Include="WebPage.cs" />
-    <Compile Include="WebPageHeader.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <ProjectReference Include="..\SharpServer\SharpServer.csproj">
+      <Project>{2e64ba73-c69f-4f41-a352-e35270584d78}</Project>
+      <Name>SharpServer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
