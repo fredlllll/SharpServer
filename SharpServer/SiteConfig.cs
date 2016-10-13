@@ -4,22 +4,35 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace SharpServer
 {
-    public class SiteConfig
+    public class SiteConfig : MarshalByRefObject
     {
         public string SiteName { get; }
 
-        public DirectoryInfo FileRootDir { get; }
-        public FileInfo SiteBinary { get;}
+        public DirectoryInfo DocumentRoot { get; }
+        public FileInfo SiteBinary { get; }
+        public int Port { get; }
         public string[] Dependencies { get; }
 
         public SiteConfig(FileInfo siteConfig)
         {
-            FileRootDir = new DirectoryInfo(@"I:\Projects\SharpServer\TestWebSite\bin\Debug");
-            SiteBinary = new FileInfo(@"I:\Projects\SharpServer\TestWebSite\bin\Debug\TestWebSite.dll");
-            Dependencies = new string[0];
+            XmlDocument doc = new XmlDocument();
+            doc.Load(siteConfig.FullName);
+
+            SiteName = doc.SelectSingleNode("/site/name").InnerText;
+
+            DocumentRoot = new DirectoryInfo(doc.SelectSingleNode("/site/documentRoot").InnerText);
+            SiteBinary = new FileInfo(Path.Combine(DocumentRoot.FullName, doc.SelectSingleNode("/site/siteBinary").InnerText));
+            Port = Convert.ToInt32(doc.SelectSingleNode("/site/port").InnerText);
+            List<string> dependencies = new List<string>();
+            foreach(XmlNode node in doc.SelectNodes("/site/dependencies/dependency"))
+            {
+                dependencies.Add(node.InnerText);
+            }
+            Dependencies = dependencies.ToArray();
         }
     }
 }

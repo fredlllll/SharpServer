@@ -9,12 +9,12 @@ namespace TestWebSite
 {
     public class TestSite : Site
     {
-        public override void Setup(SharpServer.SharpServer server)
+        public override void Start(SharpServer.SharpServer server)
         {
             server.pages.Add("/index.ssp", new TestPage());
         }
 
-        public override void Dispose()
+        public override void Stop()
         {
          
         }

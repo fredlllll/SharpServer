@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<site>
+  <name>Test Site</name>
+  <port>8989</port>
+  <documentRoot>I:\Projects\SharpServer\TestWebSite\bin\Debug</documentRoot>
+  <siteBinary>TestWebSite.dll</siteBinary>
+  <dependencies>
+  </dependencies>
+</site>
