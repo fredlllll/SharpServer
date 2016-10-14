@@ -1,0 +1,49 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ output extension=".cs" #>
+<#
+var CreateAttributeProperty = new Func<string,string>((string name)=>{
+var tab = "    ";
+	var nl = Environment.NewLine + tab +tab;
+	return "public string "+name+ nl+
+        "{"+ nl+tab+
+            "get"+ nl+tab+
+            "{"+ nl+tab+tab+
+                "return GetAttribute(\""+name+"\");"+ nl+tab+
+            "}"+ nl+tab+
+            "set"+ nl+tab+
+            "{"+ nl+tab+tab+
+                "SetAttribute(\""+name+"\", value);"+ nl+tab+
+            "}"+ nl+
+        "}"+nl;
+});
+var CreateAttributeProperty2 = new Func<string,string,string>((string name,string codeName)=>{
+var tab = "    ";
+	var nl = Environment.NewLine + tab +tab;
+	return "public string "+codeName+ nl+
+        "{"+ nl+tab+
+            "get"+ nl+tab+
+            "{"+ nl+tab+tab+
+                "return GetAttribute(\""+name+"\");"+ nl+tab+
+            "}"+ nl+tab+
+            "set"+ nl+tab+
+            "{"+ nl+tab+tab+
+                "SetAttribute(\""+name+"\", value);"+ nl+tab+
+            "}"+ nl+
+        "}"+nl;
+});
+#>
+namespace SharpServer.HTMLPage
+{
+    public class MetaTag : HTMLTag, IHeaderTag
+    {
+		<#=CreateAttributeProperty("charset")#>
+		<#=CreateAttributeProperty("content")#>
+		<#=CreateAttributeProperty2("http-equiv","http_equiv")#>
+		<#=CreateAttributeProperty("name")#>
+		<#=CreateAttributeProperty("scheme")#>
+        public MetaTag() : base("meta")
+        {
+        }
+    }
+}

@@ -29,7 +29,7 @@ namespace SharpServer
                 AppDomainProxy proxy = (AppDomainProxy)serverDomain.CreateInstanceAndUnwrap(typeof(AppDomainProxy).Assembly.FullName, typeof(AppDomainProxy).FullName);
                 proxy.logger = new Logger(logger);
                 serverDomain.AssemblyResolve += proxy.ServerDomain_AssemblyResolve;
-                SharpServer ss = proxy.CreateInstance<SharpServer>(sc,logger);
+                SharpServer ss = proxy.CreateInstance<SharpServer>(sc,proxy.logger);
                 servers.Add(ss);
             }
             foreach(var s in servers)

@@ -5,25 +5,32 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using SharpServer;
+using SharpServer.HTMLPage;
 
 namespace TestWebSite
 {
-    public class TestPage : WebPage
+    public class TestPage : HTMLPage
     {
-        public override void BeforeEmit(HttpListenerResponse response)
+        public TestPage()
         {
-            response.ContentEncoding = Encoding.UTF8;
-            response.ContentType = "text/html";
+            DefaultHTMLPageHeader h = (DefaultHTMLPageHeader)Header;
+            h.Title = "Hello World";
         }
 
-        public override void Emit(SharpServer.Buffer buf)
+        public override void BeforeEmit()
         {
-            EmitHTMLStart(buf);
-            EmitHeader(buf);
-            EmitBodyStart(buf);
-            buf.Write("hello world");
-            EmitBodyEnd(buf);
-            EmitHTMLEnd(buf);
+            Response.ContentEncoding = Encoding.UTF8;
+            Response.ContentType = "text/html";
+        }
+
+        public override void Emit()
+        {
+            EmitHTMLStart();
+            EmitHeader();
+            EmitBodyStart();
+            Buffer.Write("hello world");
+            EmitBodyEnd();
+            EmitHTMLEnd();
         }
 
         public override void AfterEmit()

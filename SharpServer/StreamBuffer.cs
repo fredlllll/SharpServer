@@ -11,8 +11,8 @@ namespace SharpServer
     {
         StreamWriter sw;
 
-        public StreamBuffer(Stream s) {
-            sw = new StreamWriter(s,Encoding.UTF8);
+        public StreamBuffer(Stream s, Encoding enc) {
+            sw = new StreamWriter(s,enc);
         }
 
         public override void Flush()

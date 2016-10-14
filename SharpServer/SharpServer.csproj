@@ -44,20 +44,60 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Buffer.cs" />
+    <Compile Include="HTMLPage\BaseTag.cs" />
+    <Compile Include="HTMLPage\DefaultHTMLPageHeader.cs" />
+    <Compile Include="HTMLPage\HTMLTag.cs" />
+    <Compile Include="HTMLPage\IHeaderTag.cs" />
+    <Compile Include="HTMLPage\LinkTag.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LinkTag.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HTMLPage\MetaTag.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MetaTag.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HTMLPage\NoScriptTag.cs" />
+    <Compile Include="HTMLPage\ScriptTag.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ScriptTag.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HTMLPage\StyleTag.cs" />
+    <Compile Include="HTMLPage\TitleTag.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MainLogger.cs" />
     <Compile Include="Page.cs" />
+    <Compile Include="PageMethods.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SharpServer.cs" />
     <Compile Include="Site.cs" />
     <Compile Include="SiteConfig.cs" />
     <Compile Include="StreamBuffer.cs" />
-    <Compile Include="WebPage.cs" />
-    <Compile Include="WebPageHeader.cs" />
+    <Compile Include="HTMLPage\HTMLPage.cs" />
+    <Compile Include="HTMLPage\HTMLPageHeader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="HTMLPage\LinkTag.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LinkTag.cs</LastGenOutput>
+    </Content>
+    <Content Include="HTMLPage\MetaTag.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MetaTag.cs</LastGenOutput>
+    </Content>
+    <Content Include="HTMLPage\ScriptTag.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ScriptTag.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

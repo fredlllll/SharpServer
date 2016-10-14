@@ -16,6 +16,7 @@ namespace SharpServer
         public FileInfo SiteBinary { get; }
         public int Port { get; }
         public string[] Dependencies { get; }
+        public Encoding Encoding { get; }
 
         public SiteConfig(FileInfo siteConfig)
         {
@@ -33,6 +34,23 @@ namespace SharpServer
                 dependencies.Add(node.InnerText);
             }
             Dependencies = dependencies.ToArray();
+            var n = doc.SelectSingleNode("/site/encoding");
+            if(n != null)
+            {
+                try
+                {
+                    Encoding = Encoding.GetEncoding(n.InnerText);
+                }
+                catch
+                {
+                    Encoding = Encoding.UTF8;
+                }
+            }
+            else
+            {
+                
+                Encoding = Encoding.UTF8;
+            }
         }
     }
 }

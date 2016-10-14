@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace SharpServer
 {
-    public class WebPageHeader
+    public abstract partial class Page
     {
+        public void Echo(string str) {
+            Buffer.Write(str);
+        }
     }
 }

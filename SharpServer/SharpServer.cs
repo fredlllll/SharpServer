@@ -14,7 +14,7 @@ namespace SharpServer
     {
         HttpListener listener;
         Thread listenerThread;
-        //SiteConfig config;
+        SiteConfig config;
         Logger logger;
 
         Assembly siteBinary;
@@ -23,7 +23,7 @@ namespace SharpServer
 
         public SharpServer(SiteConfig config, Logger logger)
         {
-            //this.config = config;
+            this.config = config;
             this.logger = logger;
             foreach(var s in config.Dependencies)
             {
@@ -87,11 +87,14 @@ namespace SharpServer
             if(pages.TryGetValue(page, out p))
             {
                 logger.Log("200: " + page);
-                StreamBuffer b = new StreamBuffer(context.Response.OutputStream);
-                p.BeforeEmit(context.Response);
-                p.Emit(b);
-                b.Flush();
+                p.Request = context.Request;
+                p.Response = context.Response;
+                p.User = context.User;
+                p.Buffer = new StreamBuffer(context.Response.OutputStream,config.Encoding);
+                p.BeforeEmit();
+                p.Emit();
                 p.AfterEmit();
+                p.Buffer.Flush();
                 context.Response.OutputStream.Close();
             }
             else
