@@ -75,6 +75,7 @@ namespace SharpServer
         System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
         void Process(object argument)
         {
+            //also gotta make one page instance per thread, or find another way so the threads dont get in each others way
             stopwatch.Restart();
             HttpListenerContext context = (HttpListenerContext)argument;
 
@@ -87,24 +88,24 @@ namespace SharpServer
             if(pages.TryGetValue(page, out p))
             {
                 logger.Log("200: " + page);
-                p.Request = context.Request;
-                p.Response = context.Response;
-                p.User = context.User;
-                p.Buffer = new StreamBuffer(context.Response.OutputStream,config.Encoding);
+                p.Reset();
+                Page.Request = context.Request;
+                Page.Response = context.Response;
+                Page.User = context.User;
+                Page.Buffer = new StreamBuffer(context.Response.OutputStream,config.Encoding);
                 p.BeforeEmit();
                 p.Emit();
                 p.AfterEmit();
-                p.Buffer.Flush();
-                context.Response.OutputStream.Close();
+                Page.Buffer.Flush();
             }
             else
             {
                 logger.Log("404: " + page);
                 context.Response.StatusCode = 404;
-                context.Response.OutputStream.Close();
             }
+            context.Response.OutputStream.Close();
             stopwatch.Stop();
-            logger.Log("Request Time: " + stopwatch.Elapsed.ToString());
+            logger.Log("Request Time: " + stopwatch.Elapsed.TotalMilliseconds);
         }
     }
 }

@@ -78,6 +78,7 @@
     <Compile Include="StreamBuffer.cs" />
     <Compile Include="HTMLPage\HTMLPage.cs" />
     <Compile Include="HTMLPage\HTMLPageHeader.cs" />
+    <Compile Include="URLResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

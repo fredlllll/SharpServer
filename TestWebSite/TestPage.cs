@@ -37,5 +37,10 @@ namespace TestWebSite
         {
             
         }
+
+        public override void Reset()
+        {
+            
+        }
     }
 }
