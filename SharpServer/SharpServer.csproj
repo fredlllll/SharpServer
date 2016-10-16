@@ -33,8 +33,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MimeTypeMap, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MediaTypeMap.2.1.0.0\lib\net40\MimeTypeMap.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Buffer.cs" />
+    <Compile Include="FilePage.cs" />
     <Compile Include="HTMLPage\BaseTag.cs" />
     <Compile Include="HTMLPage\DefaultHTMLPageHeader.cs" />
     <Compile Include="HTMLPage\HTMLTag.cs" />
@@ -68,20 +74,25 @@
     <Compile Include="HTMLPage\TitleTag.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MainLogger.cs" />
+    <Compile Include="MinimalSiteConfig.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="PageMethods.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServerUtil.cs" />
     <Compile Include="SharpServer.cs" />
     <Compile Include="Site.cs" />
     <Compile Include="SiteConfig.cs" />
+    <Compile Include="SiteDirectory.cs" />
+    <Compile Include="SiteFile.cs" />
     <Compile Include="StreamBuffer.cs" />
     <Compile Include="HTMLPage\HTMLPage.cs" />
     <Compile Include="HTMLPage\HTMLPageHeader.cs" />
-    <Compile Include="URLResolver.cs" />
+    <Compile Include="URIResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

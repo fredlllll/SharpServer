@@ -19,5 +19,7 @@ namespace SharpServer
         /// dispose of site state
         /// </summary>
         public abstract void Stop();
+
+        //public abstract 
     }
 }

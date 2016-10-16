@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -19,11 +20,12 @@ namespace SharpServer
 
         Assembly siteBinary;
         Site site;
-        public Dictionary<string, Page> pages = new Dictionary<string, Page>();
+        //public Dictionary<string, Page> pages = new Dictionary<string, Page>();
+        //public Dictionary<string, URIResolver> resolvers = new Dictionary<string, URIResolver>();
 
-        public SharpServer(SiteConfig config, Logger logger)
+        public SharpServer(FileInfo siteConfigFile, Logger logger)
         {
-            this.config = config;
+            this.config = new SiteConfig(siteConfigFile);
             this.logger = logger;
             foreach(var s in config.Dependencies)
             {
@@ -34,6 +36,8 @@ namespace SharpServer
             site = (Site)Activator.CreateInstance(sites[0]);
             listener = new HttpListener();
             listener.Prefixes.Add(string.Format("http://*:{0}/", config.Port));
+
+            config.LoadDirectories();
         }
 
         public void Start()
@@ -78,32 +82,58 @@ namespace SharpServer
             //also gotta make one page instance per thread, or find another way so the threads dont get in each others way
             stopwatch.Restart();
             HttpListenerContext context = (HttpListenerContext)argument;
+            HttpListenerRequest request = context.Request;
+            string absolutePath = request.Url.AbsolutePath;
 
-            string page = context.Request.Url.AbsolutePath;
+            URIResolver resolver = null;
+            Page p = null;
+            foreach(var kv in config.Directories)
+            {
+                if(absolutePath.StartsWith(kv.Key, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    p = kv.Value.Resolve(request);
+                    if(p != null)
+                    {
+                        resolver = kv.Value;
+                        break;
+                    }
+                }
+            }
+
+            /*string page = context.Request.Url.AbsolutePath;
             if(page.EndsWith("/"))
             {
                 page = page + "index.ssp";
-            }
-            Page p = null;
-            if(pages.TryGetValue(page, out p))
+            }*/
+
+            if(p != null)
             {
-                logger.Log("200: " + page);
-                p.Reset();
-                Page.Request = context.Request;
-                Page.Response = context.Response;
-                Page.User = context.User;
-                Page.Buffer = new StreamBuffer(context.Response.OutputStream,config.Encoding);
-                p.BeforeEmit();
-                p.Emit();
-                p.AfterEmit();
-                Page.Buffer.Flush();
+                logger.Log("200: ", absolutePath);
+                try
+                {
+                    p.Reset();
+                    p.Request = request;
+                    p.Response = context.Response;
+                    p.User = context.User;
+                    p.Buffer = new StreamBuffer(context.Response.OutputStream, config.Encoding);
+                    p.Emit();
+                    p.Buffer.Flush();
+                }
+                catch(Exception ex)
+                {
+                    logger.Log("Exception: ", ex.ToString());
+                }
             }
             else
             {
-                logger.Log("404: " + page);
+                logger.Log("404: ", absolutePath);
                 context.Response.StatusCode = 404;
             }
             context.Response.OutputStream.Close();
+            if(p != null)
+            {
+                resolver.ReturnPageInstance(p);
+            }
             stopwatch.Stop();
             logger.Log("Request Time: " + stopwatch.Elapsed.TotalMilliseconds);
         }

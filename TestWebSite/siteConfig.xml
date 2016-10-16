@@ -2,8 +2,11 @@
 <site>
   <name>Test Site</name>
   <port>8989</port>
-  <documentRoot>I:\Projects\SharpServer\TestWebSite\bin\Debug</documentRoot>
-  <siteBinary>TestWebSite.dll</siteBinary>
+  <!--<documentRoot>I:\Projects\SharpServer\TestWebSite\bin\Debug\htdocs</documentRoot>-->
+  <siteBinary>I:\Projects\SharpServer\TestWebSite\bin\Debug\TestWebSite.dll</siteBinary>
+  <directories>
+    <directory path="/" documentRoot="I:\Projects\SharpServer\TestWebSite\bin\Debug\htdocs" />
+  </directories>
   <dependencies>
   </dependencies>
 </site>

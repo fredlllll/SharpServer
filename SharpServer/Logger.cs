@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace SharpServer
         MainLogger logger;
         AppDomain domain;
         Thread loggingThread;
-        System.Collections.Concurrent.ConcurrentQueue<string> queue = new System.Collections.Concurrent.ConcurrentQueue<string>();
+        ConcurrentQueue<string[]> queue = new ConcurrentQueue<string[]>();
 
         public Logger(MainLogger logger)
         {
@@ -31,7 +32,7 @@ namespace SharpServer
         void Run()
         {
             string prefix = "["+domain.FriendlyName+"]:";
-            string s;
+            string[] sa;
             while(true)
             {
                 try
@@ -40,9 +41,9 @@ namespace SharpServer
                     {
                         Thread.Sleep(500);
                     }
-                    if(queue.TryDequeue(out s))
+                    if(queue.TryDequeue(out sa))
                     {
-                        logger.Log(prefix + s);
+                        logger.Log(prefix + string.Join("",sa));
                     }
                 }
                 catch(ThreadInterruptedException)
@@ -52,9 +53,9 @@ namespace SharpServer
             }
         }
 
-        public void Log(string message)
+        public void Log(params string[] messageparts)
         {
-            queue.Enqueue(message);
+            queue.Enqueue(messageparts);
         }
 
         public void Dispose()

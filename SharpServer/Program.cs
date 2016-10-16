@@ -17,10 +17,10 @@ namespace SharpServer
             servers = new List<SharpServer>();
             logger = new MainLogger();
 
-            List<SiteConfig> configs = new List<SiteConfig>();
+            List<MinimalSiteConfig> configs = new List<MinimalSiteConfig>();
             for(int i = 0; i < args.Length; i++)
             {
-                configs.Add(new SiteConfig(new FileInfo(args[i])));
+                configs.Add(new MinimalSiteConfig(new FileInfo(args[i])));
             }
             
             foreach(var sc in configs)
@@ -29,7 +29,7 @@ namespace SharpServer
                 AppDomainProxy proxy = (AppDomainProxy)serverDomain.CreateInstanceAndUnwrap(typeof(AppDomainProxy).Assembly.FullName, typeof(AppDomainProxy).FullName);
                 proxy.logger = new Logger(logger);
                 serverDomain.AssemblyResolve += proxy.ServerDomain_AssemblyResolve;
-                SharpServer ss = proxy.CreateInstance<SharpServer>(sc,proxy.logger);
+                SharpServer ss = proxy.CreateInstance<SharpServer>(sc.File,proxy.logger);
                 servers.Add(ss);
             }
             foreach(var s in servers)
