@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using SharpServer.Loggers;
 
 namespace SharpServer
 {
@@ -27,7 +28,8 @@ namespace SharpServer
             {
                 var serverDomain = AppDomain.CreateDomain("SharpServerPage_" + sc.SiteName);//, null, null, null, null);//for now lets not fiddle with that security stuff
                 AppDomainProxy proxy = (AppDomainProxy)serverDomain.CreateInstanceAndUnwrap(typeof(AppDomainProxy).Assembly.FullName, typeof(AppDomainProxy).FullName);
-                proxy.logger = new Logger(logger);
+                //TODO: switch case in config.xml
+                proxy.logger = new BlockingLogger(logger);
                 serverDomain.AssemblyResolve += proxy.ServerDomain_AssemblyResolve;
                 SharpServer ss = proxy.CreateInstance<SharpServer>(sc.File,proxy.logger);
                 servers.Add(ss);

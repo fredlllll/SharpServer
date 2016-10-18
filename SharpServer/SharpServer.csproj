@@ -72,7 +72,11 @@
     </Compile>
     <Compile Include="HTMLPage\StyleTag.cs" />
     <Compile Include="HTMLPage\TitleTag.cs" />
+    <Compile Include="InstanceLender.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="Loggers\AccumulatingLogger.cs" />
+    <Compile Include="Loggers\BlockingLogger.cs" />
+    <Compile Include="Loggers\DiscardingLogger.cs" />
     <Compile Include="MainLogger.cs" />
     <Compile Include="MinimalSiteConfig.cs" />
     <Compile Include="Page.cs" />

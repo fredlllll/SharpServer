@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace SharpServer
 {
-    public class Logger : MarshalByRefObject, IDisposable
+    public abstract class Logger : MarshalByRefObject, IDisposable
     {
-        MainLogger logger;
-        AppDomain domain;
+        protected MainLogger logger;
+        protected AppDomain domain;
         Thread loggingThread;
-        ConcurrentQueue<string[]> queue = new ConcurrentQueue<string[]>();
+        protected ConcurrentQueue<string[]> queue = new ConcurrentQueue<string[]>();
 
         public Logger(MainLogger logger)
         {
@@ -29,34 +29,9 @@ namespace SharpServer
             Dispose();
         }
 
-        void Run()
-        {
-            string prefix = "["+domain.FriendlyName+"]:";
-            string[] sa;
-            while(true)
-            {
-                try
-                {
-                    if(queue.Count == 0)
-                    {
-                        Thread.Sleep(500);
-                    }
-                    if(queue.TryDequeue(out sa))
-                    {
-                        logger.Log(prefix + string.Join("",sa));
-                    }
-                }
-                catch(ThreadInterruptedException)
-                {
-                    break;
-                }
-            }
-        }
+        protected abstract void Run();
 
-        public void Log(params string[] messageparts)
-        {
-            queue.Enqueue(messageparts);
-        }
+        public abstract void Log(params string[] messageparts);
 
         public void Dispose()
         {

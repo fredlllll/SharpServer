@@ -17,7 +17,7 @@ namespace SharpServer
             Response.ContentType = MimeTypes.MimeTypeMap.GetMimeType(fi.Extension);
             Response.ContentLength64 = fi.Length;
             Response.ContentEncoding = null;
-            Response.AddHeader("Content-disposition", "attachment; filename="+fi.Name);
+            //t Response.AddHeader("Content-disposition", "attachment; filename="+fi.Name);
             using(var file = fi.OpenRead())
             {
                 file.CopyTo(Response.OutputStream);

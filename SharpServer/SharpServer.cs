@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -20,8 +21,6 @@ namespace SharpServer
 
         Assembly siteBinary;
         Site site;
-        //public Dictionary<string, Page> pages = new Dictionary<string, Page>();
-        //public Dictionary<string, URIResolver> resolvers = new Dictionary<string, URIResolver>();
 
         public SharpServer(FileInfo siteConfigFile, Logger logger)
         {
@@ -75,11 +74,10 @@ namespace SharpServer
                 }
             }
         }
-
-        System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+        InstanceLender<Stopwatch> stopwatchLender = new InstanceLender<Stopwatch>();
         void Process(object argument)
         {
-            //also gotta make one page instance per thread, or find another way so the threads dont get in each others way
+            var stopwatch = stopwatchLender.Lend();
             stopwatch.Restart();
             HttpListenerContext context = (HttpListenerContext)argument;
             HttpListenerRequest request = context.Request;
@@ -99,12 +97,6 @@ namespace SharpServer
                     }
                 }
             }
-
-            /*string page = context.Request.Url.AbsolutePath;
-            if(page.EndsWith("/"))
-            {
-                page = page + "index.ssp";
-            }*/
 
             if(p != null)
             {
@@ -136,6 +128,7 @@ namespace SharpServer
             }
             stopwatch.Stop();
             logger.Log("Request Time: " + stopwatch.Elapsed.TotalMilliseconds);
+            stopwatchLender.Return(stopwatch);
         }
     }
 }
